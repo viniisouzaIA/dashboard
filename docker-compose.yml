@@ -1,9 +1,23 @@
 services:
   dashboard:
     image: dashboard-dias-gomes:latest
-    ports:
-      - "80:3000"
     environment:
       - CLINT_API_TOKEN=${CLINT_API_TOKEN}
       - NODE_ENV=production
-    restart: unless-stopped
+    networks:
+      - diasgomes
+    deploy:
+      replicas: 1
+      restart_policy:
+        condition: on-failure
+      labels:
+        - "traefik.enable=true"
+        - "traefik.http.routers.dashboard-dias-gomes.rule=Host(`dashboard.diasgomesadvoc.com.br`)"
+        - "traefik.http.routers.dashboard-dias-gomes.entrypoints=websecure"
+        - "traefik.http.routers.dashboard-dias-gomes.tls=true"
+        - "traefik.http.routers.dashboard-dias-gomes.tls.certresolver=letsencryptresolver"
+        - "traefik.http.services.dashboard-dias-gomes.loadbalancer.server.port=3000"
+
+networks:
+  diasgomes:
+    external: true
