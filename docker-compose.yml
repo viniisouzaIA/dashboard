@@ -1,8 +1,6 @@
 services:
   dashboard:
-    build:
-      context: .
-      dockerfile: Dockerfile
+    image: dashboard-dias-gomes:latest
     ports:
       - "80:3000"
     environment:
