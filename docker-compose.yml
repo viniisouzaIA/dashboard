@@ -1,0 +1,11 @@
+services:
+  dashboard:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "80:3000"
+    environment:
+      - CLINT_API_TOKEN=${CLINT_API_TOKEN}
+      - NODE_ENV=production
+    restart: unless-stopped

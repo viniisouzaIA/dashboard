@@ -1,0 +1,14 @@
+node_modules
+.next
+.env*
+.git
+.claude
+*.tsbuildinfo
+npm-debug.log*
+README.md
+AGENTS.md
+CLAUDE.md
+app.js
+index.html
+styles.css
+assets
