@@ -3,7 +3,7 @@ name: Build e Deploy
 on:
   push:
     branches:
-      - master
+      - main
 
 env:
   REGISTRY: ghcr.io
