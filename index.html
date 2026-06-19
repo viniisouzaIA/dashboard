@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard Comercial — Dias Gomes Advocacia</title>
+    <meta name="description" content="Dashboard de indicadores e performance comercial do escritório Dias Gomes Advocacia.">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <div class="app-container">
+        
+        <!-- SIDEBAR DE NAVEGAÇÃO ESQUERDO -->
+        <aside class="sidebar-left">
+            <div class="logo-container">
+                <img src="assets/logo.png" alt="Dias Gomes Advocacia" class="logo-img">
+            </div>
+            
+            <ul class="sidebar-menu">
+                <li>
+                    <a class="menu-item active">
+                        <span>📊</span> Dashboard Comercial
+                    </a>
+                </li>
+                <li>
+                    <a class="menu-item" href="#" onclick="alert('Funcionalidade integrada ao Copiloto SDR de Atendimento.')">
+                        <span>💬</span> Chat de Atendimento
+                    </a>
+                </li>
+                <li>
+                    <a class="menu-item" href="#" onclick="alert('Acesso à Base de Conhecimento RAG do Escritório.')">
+                        <span>⚖️</span> Base de Conhecimento
+                    </a>
+                </li>
+                <li>
+                    <a class="menu-item" href="#" onclick="alert('Acesso restrito ao módulo financeiro de honorários.')">
+                        <span>💰</span> Honorários & Contratos
+                    </a>
+                </li>
+                <li>
+                    <a class="menu-item" href="#" onclick="alert('Configurações gerais do CRM comercial.')">
+                        <span>⚙️</span> Configurações
+                    </a>
+                </li>
+            </ul>
+            
+            <div class="sidebar-footer">
+                <span class="badge badge-success" style="font-weight: 500; font-size: 8.5px; width: fit-content;">CRM Comercial Ativo</span>
+                <span class="font-caption" style="font-size: 11px; margin-top: 4px;">Vinícius Gomes</span>
+                <span class="font-caption" style="font-size: 10px; opacity: 0.6;">Sócio-Diretor</span>
+            </div>
+        </aside>
+
+        <!-- CONTAINER PRINCIPAL DO CONTEÚDO -->
+        <main class="main-content">
+            
+            <!-- HEADER GERAL & SELETOR DE PERÍODO -->
+            <header class="nav-header">
+                <div class="header-title-block">
+                    <h1>Indicadores Comerciais</h1>
+                    <span class="font-caption">Análise de desempenho comercial e funil de vendas do escritório</span>
+                </div>
+                
+                <div class="period-selector-wrapper">
+                    <span class="period-label">Período de Análise:</span>
+                    <select id="period-select" class="select-custom">
+                        <option value="mes" selected>Este Mês</option>
+                        <option value="hoje">Hoje</option>
+                        <option value="7dias">Últimos 7 dias</option>
+                        <option value="ano">Ano Comercial 2026</option>
+                    </select>
+                </div>
+            </header>
+
+            <!-- GRADE DO DASHBOARD -->
+            <div class="dashboard-body">
+                
+                <!-- 1. CARDS DE KPI -->
+                <section class="kpi-grid">
+                    
+                    <!-- KPI CARD 1: NOVOS LEADS -->
+                    <div class="kpi-card" id="kpi-leads" title="Clique para ver a auditoria de leads">
+                        <div class="kpi-card-header">
+                            <span class="kpi-card-title">Novos Leads</span>
+                            <span class="kpi-icon">🎯</span>
+                        </div>
+                        <div class="kpi-card-body">
+                            <div class="kpi-value-block">
+                                <span class="kpi-value" id="kpi-leads-value">0</span>
+                                <span class="kpi-subtitle">Novos contatos</span>
+                            </div>
+                            <div class="kpi-trend-block">
+                                <span class="badge badge-success" id="kpi-leads-badge">+0%</span>
+                                <svg class="sparkline-container" id="sparkline-leads"></svg>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- KPI CARD 2: LIGAÇÕES REALIZADAS -->
+                    <div class="kpi-card" id="kpi-calls" title="Clique para ver a auditoria de ligações">
+                        <div class="kpi-card-header">
+                            <span class="kpi-card-title">Ligações</span>
+                            <span class="kpi-icon">📞</span>
+                        </div>
+                        <div class="kpi-card-body">
+                            <div class="kpi-value-block">
+                                <span class="kpi-value" id="kpi-calls-value">0</span>
+                                <span class="kpi-subtitle" id="kpi-calls-ratio">0 conexões (0%)</span>
+                            </div>
+                            <div class="kpi-trend-block">
+                                <span class="badge badge-success" id="kpi-calls-badge">Hit Rate: 0%</span>
+                                <svg class="sparkline-container" id="sparkline-calls"></svg>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- KPI CARD 3: LEADS QUALIFICADOS -->
+                    <div class="kpi-card" id="kpi-qualified" title="Clique para ver os leads qualificados">
+                        <div class="kpi-card-header">
+                            <span class="kpi-card-title">Qualificados</span>
+                            <span class="kpi-icon">⚖️</span>
+                        </div>
+                        <div class="kpi-card-body">
+                            <div class="kpi-value-block">
+                                <span class="kpi-value" id="kpi-qual-value">0</span>
+                                <span class="kpi-subtitle" id="kpi-qual-ratio">Conversão: 0%</span>
+                            </div>
+                            <div class="kpi-trend-block">
+                                <span class="badge badge-success" style="background-color: var(--status-success-bg); border-color: var(--status-success-border); color: var(--status-success-text);">Passados Closers</span>
+                                <svg class="sparkline-container" id="sparkline-qual"></svg>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- KPI CARD 4: PROPOSTAS ENVIADAS -->
+                    <div class="kpi-card" id="kpi-proposals" title="Clique para ver o relatório de propostas">
+                        <div class="kpi-card-header">
+                            <span class="kpi-card-title">Propostas</span>
+                            <span class="kpi-icon">📄</span>
+                        </div>
+                        <div class="kpi-card-body">
+                            <div class="kpi-value-block">
+                                <span class="kpi-value" id="kpi-prop-value">0</span>
+                                <span class="kpi-subtitle" id="kpi-prop-value-brl">Volume: R$ 0</span>
+                            </div>
+                            <div class="kpi-trend-block">
+                                <span class="badge badge-success" style="background-color: var(--status-success-bg); border-color: var(--status-success-border); color: var(--status-success-text);">Enviados</span>
+                                <svg class="sparkline-container" id="sparkline-prop"></svg>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- KPI CARD 5: LEADS QUALIFICADOS -->
+                    <div class="kpi-card" id="kpi-leads-qual">
+                        <div class="kpi-card-header">
+                            <span class="kpi-card-title">Leads Qualificados</span>
+                            <span class="kpi-icon">✅</span>
+                        </div>
+                        <div class="kpi-card-body">
+                            <div class="kpi-value-block">
+                                <span class="kpi-value" id="kpi-leads-qual-value">0</span>
+                                <span class="kpi-subtitle">Leads aprovados</span>
+                            </div>
+                            <div class="kpi-trend-block">
+                                <span class="badge badge-success" style="background-color: var(--status-success-bg); border-color: var(--status-success-border); color: var(--status-success-text);">Qualificados</span>
+                                <svg class="sparkline-container" id="sparkline-leads-qual"></svg>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- KPI CARD 6: LEADS TRÁFEGO PAGO -->
+                    <div class="kpi-card" id="kpi-trafego-pago">
+                        <div class="kpi-card-header">
+                            <span class="kpi-card-title">Leads Tráfego Pago</span>
+                            <span class="kpi-icon">💰</span>
+                        </div>
+                        <div class="kpi-card-body">
+                            <div class="kpi-value-block">
+                                <span class="kpi-value" id="kpi-trafego-pago-value">0</span>
+                                <span class="kpi-subtitle">Meta & Google Ads</span>
+                            </div>
+                            <div class="kpi-trend-block">
+                                <span class="badge badge-success" style="background-color: var(--status-success-bg); border-color: var(--status-success-border); color: var(--status-success-text);">Tráfego Pago</span>
+                                <svg class="sparkline-container" id="sparkline-trafego-pago"></svg>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- KPI CARD 7: LEADS TRÁFEGO PAGO QUALIFICADO -->
+                    <div class="kpi-card" id="kpi-trafego-qual">
+                        <div class="kpi-card-header">
+                            <span class="kpi-card-title">Tráfego Pago Qualificado</span>
+                            <span class="kpi-icon">🎯</span>
+                        </div>
+                        <div class="kpi-card-body">
+                            <div class="kpi-value-block">
+                                <span class="kpi-value" id="kpi-trafego-qual-value">0</span>
+                                <span class="kpi-subtitle">Pagos e qualificados</span>
+                            </div>
+                            <div class="kpi-trend-block">
+                                <span class="badge badge-success" style="background-color: var(--status-success-bg); border-color: var(--status-success-border); color: var(--status-success-text);">Pago + Qualif.</span>
+                                <svg class="sparkline-container" id="sparkline-trafego-qual"></svg>
+                            </div>
+                        </div>
+                    </div>
+
+                </section>
+
+                <!-- 2. ANÁLISES DETALHADAS (FUNIL E PROPOSTAS POR PESSOA) -->
+                <section class="charts-grid">
+                    
+                    <!-- FUNIL DE CONVERSÃO COMERCIAL -->
+                    <div class="card">
+                        <div class="card-header">
+                            <div>
+                                <h2 class="card-title">Funil de Conversão Comercial</h2>
+                                <span class="card-subtitle">Fluxo de captação, contato e fechamento</span>
+                            </div>
+                            <span class="badge badge-success">Eficiência Operacional</span>
+                        </div>
+                        
+                        <div class="funnel-container">
+                            
+                            <!-- ETAPA 1: Leads -->
+                            <div class="funnel-stage">
+                                <span class="funnel-label">Leads Recebidos</span>
+                                <div class="funnel-bar-wrapper">
+                                    <div class="funnel-bar" id="funnel-bar-leads" style="width: 100%;"></div>
+                                    <span class="funnel-value-overlay" id="funnel-val-leads">0 Leads</span>
+                                </div>
+                                <span class="funnel-conversion-rate" style="background: transparent; border: none; color: var(--text-secondary);">Base 100%</span>
+                            </div>
+
+                            <!-- ETAPA 2: Ligações (Conexões) -->
+                            <div class="funnel-stage">
+                                <span class="funnel-label">Ligações Conectadas</span>
+                                <div class="funnel-bar-wrapper">
+                                    <div class="funnel-bar" id="funnel-bar-calls" style="width: 0%;"></div>
+                                    <span class="funnel-value-overlay" id="funnel-val-calls">0 Conexões</span>
+                                    <span class="funnel-percentage-overlay" id="funnel-pct-calls">0%</span>
+                                </div>
+                                <span class="funnel-conversion-rate">Conexão</span>
+                            </div>
+
+                            <!-- ETAPA 3: Qualificados -->
+                            <div class="funnel-stage">
+                                <span class="funnel-label">Leads Qualificados</span>
+                                <div class="funnel-bar-wrapper">
+                                    <div class="funnel-bar" id="funnel-bar-qual" style="width: 0%;"></div>
+                                    <span class="funnel-value-overlay" id="funnel-val-qual">0 Qualificados</span>
+                                    <span class="funnel-percentage-overlay" id="funnel-pct-qual">0%</span>
+                                </div>
+                                <span class="funnel-conversion-rate">Qualif.</span>
+                            </div>
+
+                            <!-- ETAPA 4: Propostas -->
+                            <div class="funnel-stage">
+                                <span class="funnel-label">Propostas Enviadas</span>
+                                <div class="funnel-bar-wrapper">
+                                    <div class="funnel-bar" id="funnel-bar-prop" style="width: 0%;"></div>
+                                    <span class="funnel-value-overlay" id="funnel-val-prop">0 Propostas</span>
+                                    <span class="funnel-percentage-overlay" id="funnel-pct-prop">0%</span>
+                                </div>
+                                <span class="funnel-conversion-rate">Proposta</span>
+                            </div>
+
+                        </div>
+                    </div>
+
+                    <!-- DISTRIBUIÇÃO DE PROPOSTAS POR SOCIO (CLOSER) -->
+                    <div class="card">
+                        <div class="card-header">
+                            <div>
+                                <h2 class="card-title">Propostas Enviadas por Pessoa</h2>
+                                <span class="card-subtitle">Desempenho dos sócios closers em volume financeiro</span>
+                            </div>
+                            <span class="badge badge-success">Fechar Negócio</span>
+                        </div>
+                        
+                        <div class="closers-grid" id="closers-list">
+                            <!-- Inserido dinamicamente por JS -->
+                        </div>
+                    </div>
+
+                </section>
+
+                <!-- 3. LOGS E ÚLTIMAS ATIVIDADES COMERCIAIS -->
+                <section class="card">
+                    <div class="card-header" style="border-bottom: none; padding-bottom: 0;">
+                        <div>
+                            <h2 class="card-title">Histórico de Atividades Recentes</h2>
+                            <span class="card-subtitle">Entradas de leads e propostas geradas em tempo real</span>
+                        </div>
+                        
+                        <!-- BARRA DE BUSCA COMPONENTE -->
+                        <div class="search-wrapper" style="border: none; padding: 0; max-width: 250px;">
+                            <input type="text" id="search-activities" class="search-input" placeholder="Buscar atividade ou lead..." style="background-color: var(--surface-secondary); padding: 6px 12px 6px 32px;">
+                            <span class="search-icon" style="left: 12px; font-size: 11px;">🔍</span>
+                        </div>
+                    </div>
+                    
+                    <div class="table-container" style="margin-top: var(--space-md);">
+                        <table class="data-table">
+                            <thead>
+                                <tr>
+                                    <th>Ação / Evento</th>
+                                    <th>Detalhamento</th>
+                                    <th>Status Operacional</th>
+                                    <th>Data / Hora</th>
+                                </tr>
+                            </thead>
+                            <tbody id="recent-activities-body">
+                                <!-- Inserido dinamicamente por JS -->
+                            </tbody>
+                        </table>
+                    </div>
+                </section>
+
+            </div>
+        </main>
+    </div>
+
+    <!-- MODAL OVERLAY PARA DETALHES DE AUDITORIA DE KPI -->
+    <div class="modal-overlay" id="kpi-modal-overlay">
+        <div class="modal-container">
+            <div class="modal-header">
+                <div class="modal-title-wrapper">
+                    <h2 class="modal-title" id="modal-title">Auditoria Comercial</h2>
+                    <span class="modal-subtitle font-caption" id="modal-subtitle">Detalhamento dos registros comerciais</span>
+                </div>
+                <button class="modal-close-btn" id="modal-close-btn">&times;</button>
+            </div>
+            <div class="modal-body">
+                
+                <!-- PAINEL DE SUMÁRIO DO MODAL -->
+                <div class="modal-summary-panel" id="modal-summary">
+                    <!-- Dinâmico JS -->
+                </div>
+                
+                <!-- TABELA DETALHADA -->
+                <div class="table-container">
+                    <table class="data-table">
+                        <thead id="modal-table-head">
+                            <!-- Dinâmico JS -->
+                        </thead>
+                        <tbody id="modal-table-body">
+                            <!-- Dinâmico JS -->
+                        </tbody>
+                    </table>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
