@@ -48,10 +48,15 @@ jobs:
     name: Notifica Portainer para redeploy
     runs-on: ubuntu-latest
     needs: build-and-push
-    if: ${{ secrets.PORTAINER_WEBHOOK_URL != '' }}
 
     steps:
       - name: Dispara webhook do Portainer
+        env:
+          PORTAINER_WEBHOOK_URL: ${{ secrets.PORTAINER_WEBHOOK_URL }}
         run: |
-          curl -s -X POST "${{ secrets.PORTAINER_WEBHOOK_URL }}"
+          if [ -z "$PORTAINER_WEBHOOK_URL" ]; then
+            echo "PORTAINER_WEBHOOK_URL não configurado — pulando notificação."
+            exit 0
+          fi
+          curl -s -X POST "$PORTAINER_WEBHOOK_URL"
           echo "Portainer notificado com sucesso."
