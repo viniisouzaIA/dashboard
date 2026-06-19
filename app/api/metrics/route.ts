@@ -21,6 +21,9 @@ const CHART_IDS = {
   conversao_por_origem: '01d46cf2-fc0d-4c64-8f02-585b71bee204',
   vendas_por_dia: '456b4e5b-c67c-4ee2-a181-6c0de831527f',
   vendas_totais: 'f2b0dab2-349e-49f0-9d0a-180546d8563b',
+  leads_qualificados: '093f9249-0dff-4c28-b5a4-59ac6198eaf7',
+  leads_trafego_pago: 'c0199330-83cd-46ce-a2fc-9b7746bd14b8',
+  leads_trafego_pago_qualificado: '08349bcb-97ee-420f-a224-b06f77a10f66',
 };
 
 interface DateRange { start: string; end: string; }
@@ -96,11 +99,15 @@ export async function GET(request: NextRequest) {
     motivoPerdasData,       tempoEtapaData,
     taxaPorUsuarioData,     conversaoPorOrigemData,
     vendasPorDiaData,       vendasTotaisData,
+    leadsQualificadosData,  leadsTrafegoPagoData,
+    leadsTrafegoPagoQualData,
     // Período anterior (somente KPIs numéricos)
     prevNovosLeadsData,     prevLigacoesData,
     prevQualificadosData,   prevPropostasData,
     prevTaxaConversaoData,  prevCicloVendaData,
     prevPerdidosData,       prevVendasTotaisData,
+    prevLeadsQualificadosData, prevLeadsTrafegoPagoData,
+    prevLeadsTrafegoPagoQualData,
   ] = await Promise.all([
     fetchChartData(CHART_IDS.novos_leads_total, range.start, range.end),
     fetchChartData(CHART_IDS.novos_leads_por_dia, range.start, range.end),
@@ -118,6 +125,9 @@ export async function GET(request: NextRequest) {
     fetchChartData(CHART_IDS.conversao_por_origem, range.start, range.end),
     fetchChartData(CHART_IDS.vendas_por_dia, range.start, range.end),
     fetchChartData(CHART_IDS.vendas_totais, range.start, range.end),
+    fetchChartData(CHART_IDS.leads_qualificados, range.start, range.end),
+    fetchChartData(CHART_IDS.leads_trafego_pago, range.start, range.end),
+    fetchChartData(CHART_IDS.leads_trafego_pago_qualificado, range.start, range.end),
     // Anteriores
     fetchChartData(CHART_IDS.novos_leads_total, prev.start, prev.end),
     fetchChartData(CHART_IDS.ligacoes, prev.start, prev.end),
@@ -127,6 +137,9 @@ export async function GET(request: NextRequest) {
     fetchChartData(CHART_IDS.ciclo_venda_medio, prev.start, prev.end),
     fetchChartData(CHART_IDS.total_perdidos, prev.start, prev.end),
     fetchChartData(CHART_IDS.vendas_totais, prev.start, prev.end),
+    fetchChartData(CHART_IDS.leads_qualificados, prev.start, prev.end),
+    fetchChartData(CHART_IDS.leads_trafego_pago, prev.start, prev.end),
+    fetchChartData(CHART_IDS.leads_trafego_pago_qualificado, prev.start, prev.end),
   ]);
 
   // Helpers
@@ -184,6 +197,28 @@ export async function GET(request: NextRequest) {
   const qualTotal = num(qualificadosData);
   const prevQualTotal = num(prevQualificadosData);
   const qualificadosRobson = { total: qualTotal, delta: calcDelta(qualTotal, prevQualTotal), erro: !qualificadosData };
+
+  // ── Novos KPIs numéricos ──
+  const leadsQualificadosVal = num(leadsQualificadosData);
+  const leadsQualificados = {
+    total: leadsQualificadosVal,
+    delta: calcDelta(leadsQualificadosVal, num(prevLeadsQualificadosData)),
+    erro: !leadsQualificadosData,
+  };
+
+  const leadsTrafegoPagoVal = num(leadsTrafegoPagoData);
+  const leadsTrafegoPago = {
+    total: leadsTrafegoPagoVal,
+    delta: calcDelta(leadsTrafegoPagoVal, num(prevLeadsTrafegoPagoData)),
+    erro: !leadsTrafegoPagoData,
+  };
+
+  const leadsTrafegoPagoQualVal = num(leadsTrafegoPagoQualData);
+  const leadsTrafegoPagoQualificado = {
+    total: leadsTrafegoPagoQualVal,
+    delta: calcDelta(leadsTrafegoPagoQualVal, num(prevLeadsTrafegoPagoQualData)),
+    erro: !leadsTrafegoPagoQualData,
+  };
 
   // ── Propostas ──
   type PropostasType = { total: number; porUsuario: Array<{ nome: string; quantidade: number }>; delta: number | null; erro: boolean };
@@ -286,6 +321,9 @@ export async function GET(request: NextRequest) {
     novosLeads,
     ligacoes,
     qualificadosRobson,
+    leadsQualificados,
+    leadsTrafegoPago,
+    leadsTrafegoPagoQualificado,
     propostas,
     conversao: { taxa: taxaConversao, ciclo: cicloVenda, perdidos: totalPerdidos },
     funilConversao,
