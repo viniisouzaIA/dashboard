@@ -1,0 +1,57 @@
+name: Build e Deploy
+
+on:
+  push:
+    branches:
+      - master
+
+env:
+  REGISTRY: ghcr.io
+  IMAGE_NAME: ${{ github.repository }}
+
+jobs:
+  build-and-push:
+    name: Build e publica imagem Docker
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      - name: Login no GitHub Container Registry
+        uses: docker/login-action@v3
+        with:
+          registry: ${{ env.REGISTRY }}
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Extrai metadados da imagem
+        id: meta
+        uses: docker/metadata-action@v5
+        with:
+          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          tags: |
+            type=raw,value=latest
+
+      - name: Build e push da imagem
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          labels: ${{ steps.meta.outputs.labels }}
+
+  notify-portainer:
+    name: Notifica Portainer para redeploy
+    runs-on: ubuntu-latest
+    needs: build-and-push
+    if: ${{ secrets.PORTAINER_WEBHOOK_URL != '' }}
+
+    steps:
+      - name: Dispara webhook do Portainer
+        run: |
+          curl -s -X POST "${{ secrets.PORTAINER_WEBHOOK_URL }}"
+          echo "Portainer notificado com sucesso."

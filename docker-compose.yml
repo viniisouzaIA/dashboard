@@ -1,6 +1,6 @@
 services:
   dashboard:
-    image: dashboard-dias-gomes:latest
+    image: ghcr.io/viniisouzaia/dashboard:latest
     environment:
       - CLINT_API_TOKEN=${CLINT_API_TOKEN}
       - NODE_ENV=production
