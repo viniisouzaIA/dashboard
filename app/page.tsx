@@ -20,6 +20,9 @@ interface MetricsData {
     delta: number | null; erro: boolean;
   };
   qualificadosRobson: { total: number; delta: number | null; erro: boolean };
+  leadsQualificados: { total: number; delta: number | null; erro: boolean };
+  leadsTrafegoPago: { total: number; delta: number | null; erro: boolean };
+  leadsTrafegoPagoQualificado: { total: number; delta: number | null; erro: boolean };
   propostas: { total: number; porUsuario: Array<{ nome: string; quantidade: number }>; delta: number | null; erro: boolean };
   conversao: {
     taxa: { valor: number; delta: number | null; erro: boolean };
@@ -146,8 +149,14 @@ export default function Home() {
                 delta={metrics.novosLeads.delta} erro={metrics.novosLeads.erro}
                 sparkline={metrics.novosLeads.serie} />
               <LigacoesCard ligacoes={metrics.ligacoes} />
-              <MetricCard label="Qualificados → Robson" value={metrics.qualificadosRobson.total}
+              <MetricCard label="Direcionamento Robson" value={metrics.qualificadosRobson.total}
                 delta={metrics.qualificadosRobson.delta} erro={metrics.qualificadosRobson.erro} />
+              <MetricCard label="Leads Qualificados" value={metrics.leadsQualificados.total}
+                delta={metrics.leadsQualificados.delta} erro={metrics.leadsQualificados.erro} />
+              <MetricCard label="Leads Tráfego Pago" value={metrics.leadsTrafegoPago.total}
+                delta={metrics.leadsTrafegoPago.delta} erro={metrics.leadsTrafegoPago.erro} />
+              <MetricCard label="Tráfego Pago Qualificado" value={metrics.leadsTrafegoPagoQualificado.total}
+                delta={metrics.leadsTrafegoPagoQualificado.delta} erro={metrics.leadsTrafegoPagoQualificado.erro} />
               <PropostasCard propostas={metrics.propostas} />
               <VendasCard vendas={metrics.vendas} />
             </div>
